@@ -1,0 +1,137 @@
+<div class="visit-page">
+
+  <!-- Hero -->
+  <header class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=1400&q=80" alt="Café">
+      <div class="page-hero-overlay"></div>
+    </div>
+    <div class="page-hero-content">
+      <span class="hero-eyebrow-text">We're Open</span>
+      <h1>Visit Us</h1>
+      <p>Come in, sit down, let us spoil you</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <section class="visit-section">
+    <div class="visit-grid">
+
+      <!-- Map Embed -->
+      <div class="map-side reveal-left">
+        <div class="map-frame">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12434.98742745956!2d-9.14065925!3d38.7166912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd19331a61e4f33b%3A0x400ebbde49036d0!2sLisboa%2C%20Portugal!5e0!3m2!1sen!2s!4v1700000000000"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Casa do Pão location">
+          </iframe>
+        </div>
+        <div class="map-address-tag">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>Rua das Flores, 42 — Lisboa</span>
+        </div>
+      </div>
+
+      <!-- Info Side -->
+      <div class="info-side reveal-right">
+
+        <!-- Opening Hours -->
+        <div class="info-block">
+          <span class="info-label">Opening Hours</span>
+          <ul class="hours-list">
+            @for (hour of hours; track hour.day; let i = $index) {
+              <li class="hours-row" [class.today]="i === todayIndex">
+                <span class="hours-day">{{ hour.day }}</span>
+                <span class="hours-dots"></span>
+                <span class="hours-time">{{ hour.time }}</span>
+                @if (i === todayIndex) {
+                  <span class="hours-today-pill">Today</span>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+
+        <!-- Address & Contact -->
+        <div class="info-block">
+          <span class="info-label">Find Us</span>
+          <div class="contact-list">
+            <div class="contact-item">
+              <div class="contact-icon-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Address</strong>
+                <p>Rua das Flores, 42<br>1200-195 Lisboa<br>Portugal</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .98h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Phone</strong>
+                <p>+351 21 345 6789</p>
+                <p class="contact-sub">Reservations & Orders</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Email</strong>
+                <p>hello&#64;casadopao.pt</p>
+                <p class="contact-sub">Custom cake orders welcome</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+              </div>
+              <div>
+                <strong>Getting Here</strong>
+                <p>Metro: Baixa-Chiado (2 min walk)</p>
+                <p class="contact-sub">Tram 28E stops nearby</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery strip -->
+  <section class="gallery-strip">
+    <div class="gallery-grid">
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600&q=80" alt="Interior"></div>
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80" alt="Tables"></div>
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1444717741786-19baf0c26f6b?w=600&q=80" alt="Coffee bar"></div>
+      <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80" alt="Pastries display"></div>
+    </div>
+  </section>
+
+</div>

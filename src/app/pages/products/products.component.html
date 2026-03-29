@@ -1,0 +1,110 @@
+<div class="pv-page">
+
+  <div class="pv-fixed-top">
+
+    <nav class="pv-nav" aria-label="Category filter">
+      <div class="pv-nav-inner">
+        <button
+          class="pv-tab"
+          [class.active]="activeCategory() === 'all'"
+          (click)="setCategory('all')">
+          All Items
+        </button>
+        @for (cat of dataService.categories; track cat.id) {
+          <button
+            class="pv-tab"
+            [class.active]="activeCategory() === cat.id"
+            (click)="setCategory(cat.id)">
+            {{ cat.name }}
+          </button>
+        }
+      </div>
+    </nav>
+
+  </div>
+
+  <div class="pv-body" #pvBody>
+
+    <div class="pv-container">
+
+      @if (activeCategory() !== 'all') {
+        <div class="pv-list">
+          @for (p of filteredProducts(); track p.id; let i = $index) {
+            <article class="pv-row pv-reveal" [style.animation-delay]="(i * 0.05) + 's'">
+              <div class="pv-row-img">
+                <img [src]="p.image" [alt]="p.name">
+                @if (p.badge) { <span class="pv-badge">{{ p.badge }}</span> }
+              </div>
+              <div class="pv-row-body">
+                <div class="pv-row-top">
+                  <div>
+                    <h3 class="pv-row-name">{{ p.name }}</h3>
+                    <p  class="pv-row-desc">{{ p.description }}</p>
+                  </div>
+                  <span class="pv-row-price">€{{ p.price.toFixed(2) }}</span>
+                </div>
+                <button class="pv-add" [class.added]="addedId() === p.id" (click)="addToCart(p)">
+                  @if (addedId() === p.id) {
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Added
+                  } @else {
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add to Order
+                  }
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+
+      @if (activeCategory() === 'all') {
+        @for (cat of dataService.categories; track cat.id) {
+          <div class="pv-group">
+            <div class="pv-group-head pv-reveal">
+              <div class="pv-group-left">
+                <img [src]="cat.image" [alt]="cat.name" class="pv-group-thumb">
+                <div>
+                  <span class="pv-group-sub">{{ cat.subtitle }}</span>
+                  <h2 class="pv-group-name">{{ cat.name }}</h2>
+                </div>
+              </div>
+              <a [routerLink]="['/products', cat.id]" class="pv-group-link">View all →</a>
+            </div>
+
+            <div class="pv-list">
+              @for (p of dataService.getProductsByCategory(cat.id); track p.id; let i = $index) {
+                <article class="pv-row pv-reveal" [style.animation-delay]="(i * 0.04) + 's'">
+                  <div class="pv-row-img">
+                    <img [src]="p.image" [alt]="p.name">
+                    @if (p.badge) { <span class="pv-badge">{{ p.badge }}</span> }
+                  </div>
+                  <div class="pv-row-body">
+                    <div class="pv-row-top">
+                      <div>
+                        <h3 class="pv-row-name">{{ p.name }}</h3>
+                        <p  class="pv-row-desc">{{ p.description }}</p>
+                      </div>
+                      <span class="pv-row-price">€{{ p.price.toFixed(2) }}</span>
+                    </div>
+                    <button class="pv-add" [class.added]="addedId() === p.id" (click)="addToCart(p)">
+                      @if (addedId() === p.id) {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        Added
+                      } @else {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add to Order
+                      }
+                    </button>
+                  </div>
+                </article>
+              }
+            </div>
+          </div>
+        }
+      }
+
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,47 @@
+<nav class="navbar" [class.scrolled]="scrolled()">
+  <div class="nav-inner">
+
+    <a routerLink="/" class="nav-logo" (click)="closeMobile()">
+      <img src="assets/images/logo.png" alt="Casa do Pão" class="logo-img">
+      <div class="logo-text">
+        <span class="logo-name">Casa do Pão</span>
+        <span class="logo-tagline">Artisan Sweet Shop</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
+      <li><a routerLink="/categories" routerLinkActive="active">Categories</a></li>
+      <li><a routerLink="/products" routerLinkActive="active">Menu</a></li>
+      <li><a routerLink="/about" routerLinkActive="active">About</a></li>
+      <li><a routerLink="/visit" routerLinkActive="active">Visit Us</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="cart-btn" (click)="cartService.toggleCart()" aria-label="Open cart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        @if (cartService.totalItems() > 0) {
+          <span class="cart-count">{{ cartService.totalItems() }}</span>
+        }
+      </button>
+
+      <button class="hamburger" [class.open]="mobileOpen()" (click)="toggleMobile()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" [class.open]="mobileOpen()">
+    <ul>
+      <li><a routerLink="/"           (click)="closeMobile()">Home</a></li>
+      <li><a routerLink="/categories" (click)="closeMobile()">Categories</a></li>
+      <li><a routerLink="/products"   (click)="closeMobile()">Menu</a></li>
+      <li><a routerLink="/about"      (click)="closeMobile()">About</a></li>
+      <li><a routerLink="/visit"      (click)="closeMobile()">Visit Us</a></li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,111 @@
+<div class="about-page">
+
+  <!-- Hero -->
+  <header class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=1400&q=80" alt="About">
+      <div class="page-hero-overlay"></div>
+    </div>
+    <div class="page-hero-content">
+      <span class="hero-eyebrow-text">Our Story</span>
+      <h1>About Casa do Pão</h1>
+      <p>Tradition, passion and the finest ingredients</p>
+    </div>
+  </header>
+
+  <!-- Story Section -->
+  <section class="story-section">
+    <div class="story-grid">
+      <div class="story-copy reveal-left">
+        <span class="section-label">How It Began</span>
+        <h2>From a Small Kitchen <em>to a Beloved Shop</em></h2>
+        <p>
+          In 2010, chef Ana Ferreira returned from five years in Paris with a dream:
+          to bring the beauty of French patisserie together with the soul of Portuguese
+          baking. She opened Casa do Pão in a narrow street in Lisboa with just four
+          tables, a single espresso machine, and an endless passion for craft.
+        </p>
+        <p>
+          Word spread quickly. Within a year, locals lined up before opening time for
+          the freshly baked croissants, and tourists hunted down the address for
+          what the New York Times called "Lisboa's most beautiful café."
+        </p>
+        <p>
+          Today, Casa do Pão remains family-run, independent, and deeply rooted in the
+          belief that the best things in life are made slowly, by hand, with love.
+        </p>
+        <a routerLink="/visit" class="btn-primary">Come Visit Us</a>
+      </div>
+
+      <div class="story-images reveal-right">
+        <div class="story-img-a">
+          <img src="https://images.unsplash.com/photo-1493925410384-84f842e616fb?w=700&q=80" alt="Pastry making">
+        </div>
+        <div class="story-img-b">
+          <img src="https://images.unsplash.com/photo-1559181567-c3190aa9dbed?w=400&q=80" alt="Coffee">
+          <div class="story-year-badge">
+            <span>Est.</span>
+            <strong>2010</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="values-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">What We Believe</span>
+        <h2>Our Values</h2>
+      </div>
+      <div class="values-grid">
+        @for (val of values; track val.title; let i = $index) {
+          <div class="value-card reveal" [style.animation-delay]="(i * 0.1) + 's'">
+            <span class="value-icon">{{ val.icon }}</span>
+            <h3 class="value-title">{{ val.title }}</h3>
+            <p class="value-desc">{{ val.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="team-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">The People</span>
+        <h2>Meet Our Team</h2>
+      </div>
+      <div class="team-grid">
+        @for (member of team; track member.name; let i = $index) {
+          <div class="team-card reveal" [style.animation-delay]="(i * 0.12) + 's'">
+            <div class="team-img-wrap">
+              <img [src]="member.image" [alt]="member.name" class="team-img">
+              <div class="team-img-overlay"></div>
+            </div>
+            <div class="team-info">
+              <h3 class="team-name">{{ member.name }}</h3>
+              <span class="team-role">{{ member.role }}</span>
+              <p class="team-bio">{{ member.bio }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Pull Quote -->
+  <section class="quote-section">
+    <div class="quote-inner">
+      <div class="quote-mark">"</div>
+      <blockquote>
+        We don't bake to sell. We bake because there is no greater joy
+        than watching someone take their first bite.
+      </blockquote>
+      <cite>— Ana Ferreira, Founder</cite>
+    </div>
+  </section>
+
+</div>
