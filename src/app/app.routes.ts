@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,19 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/visit-us/visit-us.component').then(m => m.VisitUsComponent),
     title: 'Visit Us — Casa do Pão'
+  },
+  {
+    path: 'admin-login',
+    loadComponent: () =>
+      import('./pages/admin-login/admin-login.component').then(m => m.AdminLoginComponent),
+    title: 'Admin Login — Casa do Pão'
+  },
+  {
+    path: 'admin',
+    loadComponent: () =>
+      import('./pages/admin-panel/admin-panel.component').then(m => m.AdminPanelComponent),
+    canActivate: [adminGuard],
+    title: 'Admin Panel — Casa do Pão'
   },
   {
     path: '**',

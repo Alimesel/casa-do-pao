@@ -37,12 +37,12 @@
               </div>
               <div class="pv-row-body">
                 <div class="pv-row-top">
-                  <div>
-                    <h3 class="pv-row-name">{{ p.name }}</h3>
-                    <p  class="pv-row-desc">{{ p.description }}</p>
-                  </div>
+                  <h3 class="pv-row-name">{{ p.name }}</h3>
                   <span class="pv-row-price">€{{ p.price.toFixed(2) }}</span>
                 </div>
+                @if (p.description) {
+                  <p class="pv-row-desc">{{ p.description }}</p>
+                }
                 <button class="pv-add" [class.added]="addedId() === p.id" (click)="addToCart(p)">
                   @if (addedId() === p.id) {
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -81,12 +81,12 @@
                   </div>
                   <div class="pv-row-body">
                     <div class="pv-row-top">
-                      <div>
-                        <h3 class="pv-row-name">{{ p.name }}</h3>
-                        <p  class="pv-row-desc">{{ p.description }}</p>
-                      </div>
+                      <h3 class="pv-row-name">{{ p.name }}</h3>
                       <span class="pv-row-price">€{{ p.price.toFixed(2) }}</span>
                     </div>
+                    @if (p.description) {
+                      <p class="pv-row-desc">{{ p.description }}</p>
+                    }
                     <button class="pv-add" [class.added]="addedId() === p.id" (click)="addToCart(p)">
                       @if (addedId() === p.id) {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>

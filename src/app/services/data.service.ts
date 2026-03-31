@@ -6,16 +6,17 @@ import { Category, Product } from '../models/product.model';
 export class DataService {
   private supabase = inject(SupabaseService);
 
-  private _categories = signal<Category[]>([]);
-  private _products   = signal<Product[]>([]);
-  private _loading    = signal(false);
-  private _error      = signal<string | null>(null);
+  // ← now PUBLIC so admin panel can read them directly
+  readonly categoriesSignal = signal<Category[]>([]);
+  readonly productsSignal   = signal<Product[]>([]);
+  private _loading          = signal(false);
+  private _error            = signal<string | null>(null);
 
-  readonly loading  = this._loading.asReadonly();
-  readonly error    = this._error.asReadonly();
+  readonly loading = this._loading.asReadonly();
+  readonly error   = this._error.asReadonly();
 
-  get categories(): Category[] { return this._categories(); }
-  get products(): Product[]    { return this._products(); }
+  get categories(): Category[] { return this.categoriesSignal(); }
+  get products(): Product[]    { return this.productsSignal(); }
 
   constructor() {
     this.loadAll();
@@ -27,41 +28,34 @@ export class DataService {
 
     try {
       const [catsRes, prodsRes] = await Promise.all([
-        this.supabase.client
-          .from('categories')
-          .select('*')
-          .order('id'),
-
-        this.supabase.client
-          .from('products')
-          .select('*')
-          .order('id')
+        this.supabase.client.from('categories').select('*').order('id'),
+        this.supabase.client.from('products').select('*').order('id')
       ]);
 
       if (catsRes.error)  throw catsRes.error;
       if (prodsRes.error) throw prodsRes.error;
 
-      this._categories.set(
+      this.categoriesSignal.set(
         (catsRes.data ?? []).map(r => ({
           id:          r.id,
           name:        r.name,
-          subtitle:    r.subtitle,
-          description: r.description,
-          image:       r.image,
-          color:       r.color
+          subtitle:    r.subtitle   ?? '',
+          description: r.description ?? '',
+          image:       r.image      ?? '',
+          color:       r.color      ?? '#ffffff'
         }))
       );
 
-      this._products.set(
+      this.productsSignal.set(
         (prodsRes.data ?? []).map(r => ({
           id:          r.id,
           name:        r.name,
-          description: r.description,
+          description: r.description ?? '',
           price:       Number(r.price),
           categoryId:  r.category_id,
-          image:       r.image,
+          image:       r.image    ?? '',
           featured:    r.featured ?? false,
-          badge:       r.badge ?? undefined
+          badge:       r.badge    ?? undefined
         }))
       );
     } catch (err: any) {
@@ -73,14 +67,14 @@ export class DataService {
   }
 
   getCategoryById(id: string): Category | undefined {
-    return this._categories().find(c => c.id === id);
+    return this.categoriesSignal().find(c => c.id === id);
   }
 
   getProductsByCategory(categoryId: string): Product[] {
-    return this._products().filter(p => p.categoryId === categoryId);
+    return this.productsSignal().filter(p => p.categoryId === categoryId);
   }
 
   getFeaturedProducts(): Product[] {
-    return this._products().filter(p => p.featured);
+    return this.productsSignal().filter(p => p.featured);
   }
 }
