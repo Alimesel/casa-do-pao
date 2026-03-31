@@ -12,23 +12,27 @@
       <div class="ambient-glow"></div>
 
       <div class="fruit f-left">
-        <img src="assets/images/strawberry.png" alt="Strawberry" loading="eager" draggable="false">
+        <img src="assets/images/strawberry.png" alt="Strawberry"
+             loading="eager" fetchpriority="high" draggable="false">
       </div>
 
       <div class="donut-rig">
         <div class="card">
           <div class="d-face d-back">
-            <img src="assets/images/chocodonut.png" alt="Donut base" loading="eager" draggable="false">
+            <img src="assets/images/chocodonut.png" alt="Donut base"
+                 loading="eager" fetchpriority="high" draggable="false">
           </div>
           <div class="d-face d-front">
-            <img src="assets/images/donut.png" alt="Chocolate donut" loading="eager" draggable="false">
+            <img src="assets/images/donut.png" alt="Donut"
+                 loading="eager" fetchpriority="high" draggable="false">
           </div>
         </div>
         <div class="ground-shd"></div>
       </div>
 
       <div class="fruit f-right">
-        <img src="assets/images/oneberry1.webp" alt="Blueberry" loading="eager" draggable="false">
+        <img src="assets/images/oneberry1.webp" alt="Blueberry"
+             loading="eager" fetchpriority="high" draggable="false">
       </div>
 
     </div>
@@ -125,7 +129,7 @@
   </div>
 
   <div class="split-img reveal-right">
-    <img src="assets/images/dessabout.png" alt="Assorted desserts">
+    <img src="assets/images/dessabout.png" alt="Assorted desserts" loading="lazy">
   </div>
 
 </section>
@@ -136,7 +140,7 @@
   <div class="teaser-grid">
 
     <div class="teaser-images reveal-left">
-      <img src="assets/images/story.png" alt="Our story">
+      <img src="assets/images/story.png" alt="Our story" loading="lazy">
     </div>
 
     <div class="teaser-copy reveal-right">
@@ -159,18 +163,15 @@
 <section class="featured-section">
   <div class="feat-container">
 
-    <!-- Header: centred, consistent with the rest of the page -->
     <div class="feat-header reveal">
       <span class="section-label">Our Selection</span>
       <h2>Taste Our World</h2>
-      
     </div>
 
     <div class="featured-grid">
       @for (cat of dataService.categories; track cat.id; let i = $index) {
         <article class="feat-card reveal" [style.animation-delay]="(i * 0.1) + 's'">
 
-          <!-- Image: click to toggle "More [category]" overlay -->
           <div
             class="feat-img-wrap"
             [class.flipped]="flippedId() === dataService.getProductsByCategory(cat.id)[0]?.id"
@@ -179,17 +180,15 @@
             <img
               [src]="dataService.getProductsByCategory(cat.id)[0]?.image"
               [alt]="dataService.getProductsByCategory(cat.id)[0]?.name"
-              class="feat-img">
+              class="feat-img"
+              loading="lazy">
 
-            <!-- Category pill (top-left, always) -->
             <span class="feat-cat-pill">{{ cat.name }}</span>
 
-            <!-- Badge (top-right, always) -->
             @if (dataService.getProductsByCategory(cat.id)[0]?.badge) {
               <span class="feat-badge">{{ dataService.getProductsByCategory(cat.id)[0]?.badge }}</span>
             }
 
-            <!-- Overlay: shows "More [category]" on image click -->
             <div class="feat-overlay">
               <a
                 [routerLink]="['/products', cat.id]"
@@ -204,7 +203,6 @@
 
           </div>
 
-          <!-- Info panel -->
           <div class="feat-info">
             <div class="feat-meta">
               <span class="feat-price">€{{ dataService.getProductsByCategory(cat.id)[0]?.price?.toFixed(2) }}</span>
@@ -212,7 +210,6 @@
             <h3 class="feat-name">{{ dataService.getProductsByCategory(cat.id)[0]?.name }}</h3>
             <p  class="feat-desc">{{ dataService.getProductsByCategory(cat.id)[0]?.description }}</p>
 
-            <!-- Add to Order — always visible at the bottom -->
             <button
               class="feat-add-btn"
               [class.added]="addedId() === dataService.getProductsByCategory(cat.id)[0]?.id"
@@ -231,7 +228,6 @@
       }
     </div>
 
-    <!-- CTA row: See Full Menu (mobile + desktop) -->
     <div class="feat-cta reveal">
       <a routerLink="/products" class="btn-brown">
         See Full Menu
@@ -266,7 +262,7 @@
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
         </svg>
       </div>
-      <div><h4>Location</h4><p> da granja do pessube</p><p>Bissau, Guinea-Bissau</p></div>
+      <div><h4>Location</h4><p>da granja do pessube</p><p>Bissau, Guinea-Bissau</p></div>
     </div>
 
     <div class="ribbon-divider"></div>
