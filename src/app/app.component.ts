@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { DataService } from './services/data.service';
 import { CommonModule } from '@angular/common';
@@ -21,55 +21,59 @@ declare const window: any;
         {{ dataService.error() }}
       </div>
     } @else {
-      <app-navbar />
+      @if (pageReady()) {
+        <app-navbar />
+      }
       <router-outlet />
-      <app-footer />
-      <app-cart-sidebar />
+      @if (pageReady()) {
+        <app-footer />
+        <app-cart-sidebar />
+      }
     }
   `
 })
 export class AppComponent implements OnInit {
-  dataService  = inject(DataService);
+  dataService    = inject(DataService);
   private router = inject(Router);
 
   isAdminRoute = false;
+  pageReady    = signal(false);
 
   constructor() {
-    // ── Scroll to top on every route change ──────────────────
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe((e: any) => {
         this.isAdminRoute = (e.url as string).startsWith('/admin');
-        // Always scroll window to top when navigating
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       });
   }
 
   ngOnInit() {
-    // ── Hide splash as soon as data has loaded ────────────────
-    // DataService starts loading in its constructor.
-    // We poll the loading signal; once it's false AND categories exist, hide.
-    const checkReady = () => {
-      if (!this.dataService.loading() && this.dataService.categories.length > 0) {
-        // Small paint-frame delay so Angular finishes rendering first
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (typeof window.hideSplash === 'function') {
-              window.hideSplash();
-            }
-          });
-        });
-      } else if (this.dataService.error()) {
-        // If there is an error, hide splash anyway so error message shows
-        if (typeof window.hideSplash === 'function') {
-          window.hideSplash();
-        }
-      } else {
-        // Keep checking every 80ms
-        setTimeout(checkReady, 80);
-      }
+    // Home component calls this once its view is painted
+    window.notifyPageReady = () => {
+      this.pageReady.set(true);
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (typeof window.hideSplash === 'function') window.hideSplash();
+      }));
     };
-    // Start checking after a tiny delay to let Angular bootstrap fully
-    setTimeout(checkReady, 100);
+
+    // Fallback: if notifyPageReady is never called (error state etc.), bail out after 4s
+    setTimeout(() => {
+      if (!this.pageReady()) {
+        this.pageReady.set(true);
+        if (typeof window.hideSplash === 'function') window.hideSplash();
+      }
+    }, 4000);
+
+    // For any route that is NOT home, show the shell immediately
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: any) => {
+        const url = e.url as string;
+        if (url !== '/' && url !== '') {
+          this.pageReady.set(true);
+          if (typeof window.hideSplash === 'function') window.hideSplash();
+        }
+      });
   }
 }

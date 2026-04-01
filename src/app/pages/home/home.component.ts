@@ -8,6 +8,8 @@ import { DataService } from '../../services/data.service';
 import { CartService } from '../../services/cart.service';
 import { Product } from '../../models/product.model';
 
+declare const window: any;
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -53,6 +55,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.setupReveal();
     this.bindTrackScroll();
+
+    // Wait for the browser to actually paint the home page before
+    // revealing the navbar/footer and dismissing the splash screen.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (typeof window.notifyPageReady === 'function') {
+          window.notifyPageReady();
+        }
+      });
+    });
   }
 
   @HostListener('window:scroll')
@@ -107,10 +119,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /* ── Featured card image flip ── */
-  /**
-   * Toggle the "More [Category]" overlay on the card image.
-   * Clicking the same card again closes it; clicking another card switches.
-   */
   toggleFlip(id: number) {
     this.flippedId.update(current => (current === id ? null : id));
   }
