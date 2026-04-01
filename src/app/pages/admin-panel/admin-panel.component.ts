@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -257,7 +257,19 @@ export class AdminPanelComponent implements OnInit {
       this.deleting.set(null);
     }
   }
+  // ── Search clear ──────────────────────────
+clearSearch(): void {
+  this.productSearch = '';
+  this._searchTerm.set('');
+}
+// Add to class properties:
+navScrolled = signal(false);
 
+// Add HostListener (import HostListener from @angular/core):
+@HostListener('window:scroll')
+onScroll(): void {
+  this.navScrolled.set(window.scrollY > 40);
+}
   // ── Save product ──────────────────────────
   async saveProd() {
   if (!this.prodForm.name?.trim() || !this.prodForm.categoryId) {

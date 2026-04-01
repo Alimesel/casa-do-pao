@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy, inject,
-  AfterViewInit, ViewChild, ElementRef, HostListener, signal
+  AfterViewInit, ViewChild, ElementRef, HostListener, signal, computed
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -23,12 +23,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   dataService = inject(DataService);
   cartService = inject(CartService);
 
-  featuredProducts: Product[] = [];
+  // ── Reactive: re-evaluates automatically when productsSignal changes ──
+  featuredProducts = computed(() =>
+    this.dataService.productsSignal().filter(p => p.featured)
+  );
 
-  /** ID of the last product added — resets after 1.5 s */
-  addedId = signal<number | null>(null);
-
-  /** ID of the card whose image was clicked (shows "More [category]" overlay) */
+  addedId   = signal<number | null>(null);
   flippedId = signal<number | null>(null);
 
   scrollY = 0;
@@ -48,21 +48,28 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackScrollListener?: () => void;
 
   ngOnInit() {
-    this.featuredProducts = this.dataService.getFeaturedProducts();
     this.typingTimer = setTimeout(() => this.startTyping(), 600);
   }
+  
 
   ngAfterViewInit() {
     this.setupReveal();
     this.bindTrackScroll();
 
-    // Wait for the browser to actually paint the home page before
-    // revealing the navbar/footer and dismissing the splash screen.
-    requestAnimationFrame(() => {
+    // ── FIX: wait for Supabase data before hiding the splash screen ──
+    // Previously notifyPageReady() fired on the next animation frame
+    // after DOM paint — before the async fetch completed, so products
+    // were always empty when the page first appeared.
+    this.dataService.dataReady.then(() => {
       requestAnimationFrame(() => {
-        if (typeof window.notifyPageReady === 'function') {
-          window.notifyPageReady();
-        }
+        requestAnimationFrame(() => {
+          // Re-run reveal now that products are in the DOM
+          this.setupReveal();
+
+          if (typeof window.notifyPageReady === 'function') {
+            window.notifyPageReady();
+          }
+        });
       });
     });
   }
@@ -70,7 +77,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostListener('window:scroll')
   onScroll() { this.scrollY = window.scrollY; }
 
-  /* ── Category carousel ── */
   catPrev() {
     this.catIndex.update(i => Math.max(0, i - 1));
     this.scrollToIndex(this.catIndex());
@@ -111,19 +117,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     track.addEventListener('scroll', this.trackScrollListener, { passive: true });
   }
 
-  /* ── Cart ── */
   addToCart(p: Product) {
     this.cartService.addToCart(p);
     this.addedId.set(p.id);
     setTimeout(() => this.addedId.set(null), 1500);
   }
 
-  /* ── Featured card image flip ── */
   toggleFlip(id: number) {
     this.flippedId.update(current => (current === id ? null : id));
   }
 
-  /* ── Typing animation ── */
   private startTyping() {
     const phrase = this.phrases[this.phraseIndex];
     if (this.isDeleting) {
@@ -144,8 +147,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.typingTimer = setTimeout(() => this.startTyping(), delay);
   }
 
-  /* ── Scroll-reveal ── */
   private setupReveal() {
+    this.observer?.disconnect();
     this.observer = new IntersectionObserver(
       entries => entries.forEach(e => {
         if (e.isIntersecting) e.target.classList.add('visible');

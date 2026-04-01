@@ -1,47 +1,92 @@
 <nav class="navbar" [class.scrolled]="scrolled()">
-  <div class="nav-inner">
 
-    <a routerLink="/" class="nav-logo" (click)="closeMobile()">
-      <img src="assets/images/logo.png" alt="Casa do Pão" class="logo-img">
-      <div class="logo-text">
-        <span class="logo-name">Casa do Pão</span>
-        <span class="logo-tagline">Artisan Sweet Shop</span>
+  <!-- ══ MAIN BAR ══ -->
+  <div class="nb-bar">
+
+    <!-- Logo -->
+    <a routerLink="/" class="nb-logo" (click)="closeMobile()">
+      <img src="assets/images/logo.png" alt="Casa do Pão" class="nb-logo__img">
+      <div class="nb-logo__rule" aria-hidden="true"></div>
+      <div class="nb-logo__text">
+        <span class="nb-logo__name">Casa do Pão</span>
+        <span class="nb-logo__tagline">Artisan Sweet Shop · Bissau</span>
       </div>
     </a>
 
-    <ul class="nav-links">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
+    <!-- Desktop links -->
+    <ul class="nb-links" role="list">
+      <li><a routerLink="/"           routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
       <li><a routerLink="/categories" routerLinkActive="active">Categories</a></li>
-      <li><a routerLink="/products" routerLinkActive="active">Menu</a></li>
-      <li><a routerLink="/about" routerLinkActive="active">About</a></li>
-      <li><a routerLink="/visit" routerLinkActive="active">Visit Us</a></li>
+      <li><a routerLink="/products"   routerLinkActive="active">Menu</a></li>
+      <li><a routerLink="/about"      routerLinkActive="active">About</a></li>
+      <li><a routerLink="/visit"      routerLinkActive="active">Visit Us</a></li>
     </ul>
 
-    <div class="nav-actions">
-      <button class="cart-btn" (click)="cartService.toggleCart()" aria-label="Open cart">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <!-- Actions -->
+    <div class="nb-actions">
+
+      <!-- Cart -->
+      <button class="nb-cart" (click)="cartService.toggleCart()" aria-label="Open cart">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5">
           <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>
           <path d="M16 10a4 4 0 01-8 0"/>
         </svg>
         @if (cartService.totalItems() > 0) {
-          <span class="cart-count">{{ cartService.totalItems() }}</span>
+          <span class="nb-cart__badge">{{ cartService.totalItems() }}</span>
         }
       </button>
 
-      <button class="hamburger" [class.open]="mobileOpen()" (click)="toggleMobile()" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
+      <!-- Hamburger — mobile only -->
+      <button
+        class="nb-burger"
+        [class.is-open]="mobileOpen()"
+        (click)="toggleMobile()"
+        aria-label="Open menu"
+        [attr.aria-expanded]="mobileOpen()">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
+
     </div>
   </div>
 
-  <div class="mobile-menu" [class.open]="mobileOpen()">
-    <ul>
-      <li><a routerLink="/"           (click)="closeMobile()">Home</a></li>
-      <li><a routerLink="/categories" (click)="closeMobile()">Categories</a></li>
-      <li><a routerLink="/products"   (click)="closeMobile()">Menu</a></li>
-      <li><a routerLink="/about"      (click)="closeMobile()">About</a></li>
-      <li><a routerLink="/visit"      (click)="closeMobile()">Visit Us</a></li>
-    </ul>
-  </div>
 </nav>
+
+<!-- ══ MOBILE DRAWER — outside <nav> to avoid backdrop-filter stacking context ══ -->
+<div class="nb-drawer" [class.is-open]="mobileOpen()">
+
+  <!-- Close button -->
+  <button class="nb-drawer__close" (click)="closeMobile()" aria-label="Close menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1.6">
+      <line x1="18" y1="6"  x2="6"  y2="18"/>
+      <line x1="6"  y1="6"  x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <nav class="nb-drawer__nav">
+    <a routerLink="/"           (click)="closeMobile()" class="nb-drawer__link">Home</a>
+    <a routerLink="/categories" (click)="closeMobile()" class="nb-drawer__link">Categories</a>
+    <a routerLink="/products"   (click)="closeMobile()" class="nb-drawer__link">Menu</a>
+    <a routerLink="/about"      (click)="closeMobile()" class="nb-drawer__link">About</a>
+    <a routerLink="/visit"      (click)="closeMobile()" class="nb-drawer__link">Visit Us</a>
+  </nav>
+
+  <div class="nb-drawer__footer">
+    <span class="nb-drawer__footer-text">Bissau, Guiné-Bissau</span>
+    <span aria-hidden="true">·</span>
+    <span class="nb-drawer__footer-text">Open from 07:00</span>
+  </div>
+
+</div>
+
+<!-- Backdrop -->
+@if (mobileOpen()) {
+  <div class="nb-backdrop" (click)="closeMobile()" aria-hidden="true"></div>
+}
+
+<!-- Page spacer -->
+<div class="nb-spacer"></div>

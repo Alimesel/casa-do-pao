@@ -12,19 +12,26 @@ import { CartService } from '../../services/cart.service';
 })
 export class NavbarComponent {
   cartService = inject(CartService);
-  scrolled = signal(false);
-  mobileOpen = signal(false);
+  scrolled    = signal(false);
+  mobileOpen  = signal(false);
 
   @HostListener('window:scroll')
-  onScroll() {
+  onScroll(): void {
     this.scrolled.set(window.scrollY > 40);
   }
 
-  toggleMobile() {
-    this.mobileOpen.update(v => !v);
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.mobileOpen()) this.closeMobile();
   }
 
-  closeMobile() {
+  toggleMobile(): void {
+    this.mobileOpen.update(v => !v);
+    document.body.style.overflow = this.mobileOpen() ? 'hidden' : '';
+  }
+
+  closeMobile(): void {
     this.mobileOpen.set(false);
+    document.body.style.overflow = '';
   }
 }

@@ -1,6 +1,6 @@
-/* ═══════════════════════════════════════════════════════════════
+/* ============================================================
    ADMIN LOGIN  ·  Casa do Pão  ·  Warm Editorial
-   ═══════════════════════════════════════════════════════════════ */
+   ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
@@ -56,7 +56,6 @@
   padding: 3rem 2.5rem;
   overflow: hidden;
 
-  /* Subtle warm texture */
   &::before {
     content: '';
     position: absolute;
@@ -130,7 +129,6 @@
   text-transform: uppercase;
 }
 
-/* Decorative shapes */
 .lp-brand-deco {
   position: relative;
   height: 80px;
@@ -217,7 +215,6 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Mobile brand (only shown on small screens) */
 .lp-mobile-brand {
   display: none;
 
@@ -242,7 +239,6 @@
   }
 }
 
-/* Form header */
 .lp-form-header {
   margin-bottom: 2rem;
 }
@@ -273,7 +269,6 @@
   line-height: 1.5;
 }
 
-/* Error */
 .lp-error {
   display: flex;
   align-items: center;
@@ -300,7 +295,6 @@
   80%     { transform: translateX(3px); }
 }
 
-/* Fields */
 .lp-form {
   display: flex;
   flex-direction: column;
@@ -343,7 +337,8 @@
   border: 1.5px solid var(--border);
   border-radius: 8px;
   font-family: var(--font);
-  font-size: 0.92rem;
+  /* ✅ 16px prevents iOS Safari zoom on focus */
+  font-size: 16px;
   font-weight: 400;
   color: var(--ink);
   outline: none;
@@ -358,8 +353,6 @@
   &:focus {
     border-color: var(--amber);
     box-shadow: 0 0 0 3px var(--amber-dim);
-
-    ~ .lp-input-icon { color: var(--amber); } /* won't work due to DOM order — handled below */
   }
 
   &:-webkit-autofill {
@@ -372,12 +365,11 @@
   color: var(--amber);
 }
 
-/* Submit button */
 .lp-submit {
   margin-top: 0.6rem;
   width: 100%;
   padding: 0.9rem 1.5rem;
-  background: var(--espresso);
+  background: var(--btn-primary);
   color: var(--cream);
   font-family: var(--font);
   font-size: 0.88rem;
@@ -419,7 +411,6 @@
   }
 }
 
-/* Spinner */
 .lp-spin {
   display: inline-block;
   width: 15px;
@@ -433,7 +424,6 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Footer note */
 .lp-footer-note {
   text-align: center;
   font-size: 0.70rem;

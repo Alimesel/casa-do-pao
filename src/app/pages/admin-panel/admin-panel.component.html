@@ -1,8 +1,7 @@
 <div class="ap">
 
-  <!-- ═══ NAVBAR (fixed, z 500) ═══ -->
+  <!-- ═══ NAVBAR ═══ -->
   <nav class="ap-nav">
-
     <div class="ap-nav__brand">
       <div class="ap-nav__logo-wrap">
         <img src="assets/images/logo.png" alt="Casa do Pão">
@@ -15,7 +14,6 @@
 
     <div class="ap-nav__spacer"></div>
 
-    <!-- Management dropdown -->
     <div class="ap-nav__mgmt">
       <button class="ap-nav__mgmt-btn" [class.is-open]="mgmtOpen()" (click)="toggleMgmt()" type="button">
         <span class="ap-nav__mgmt-icon">
@@ -70,15 +68,13 @@
         </div>
       }
 
-      <!-- Dropdown backdrop -->
       @if (mgmtOpen()) {
         <div style="position:fixed;inset:0;z-index:599;" (click)="closeMgmt()"></div>
       }
     </div>
-
   </nav>
 
-  <!-- ═══ LOADING / ERROR (full page, below both bars) ═══ -->
+  <!-- ═══ LOADING / ERROR ═══ -->
   @if (loading()) {
     <div class="ap-state">
       <div class="ap-state-ring"></div>
@@ -100,12 +96,9 @@
     </div>
   }
 
-  <!-- ═══════════════════════════════════════════════════════
-       CATEGORIES TAB
-       ══════════════════════════════════════════════════════ -->
+  <!-- ═══ CATEGORIES TAB ═══ -->
   @if (activeTab() === 'categories' && !loading() && !loadError()) {
 
-    <!-- SUBBAR — fixed solid bar under navbar -->
     <div class="ap-subbar">
       <div class="ap-subbar__inner">
         <div class="ap-subbar__title-group">
@@ -136,7 +129,6 @@
       </div>
     </div>
 
-    <!-- Page content -->
     <div class="ap-content">
       @if (categories().length === 0) {
         <div class="ap-empty">
@@ -197,12 +189,9 @@
     </div>
   }
 
-  <!-- ═══════════════════════════════════════════════════════
-       PRODUCTS TAB
-       ══════════════════════════════════════════════════════ -->
+  <!-- ═══ PRODUCTS TAB ═══ -->
   @if (activeTab() === 'products' && !loading() && !loadError()) {
 
-    <!-- SUBBAR -->
     <div class="ap-subbar">
       <div class="ap-subbar__inner">
         <div class="ap-subbar__title-group">
@@ -225,17 +214,33 @@
           </div>
         </div>
 
+        <!-- ── Enhanced search ── -->
         <div class="ap-subbar__search">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
           <input
-            type="text"
-            placeholder="Search products…"
+            type="search"
+            placeholder="Search"
             [(ngModel)]="productSearch"
             (ngModelChange)="onSearchChange($event)"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
           >
+          <!-- Clear × button -->
+          <button
+            class="ap-subbar__search-clear"
+            [class.is-visible]="productSearch.length > 0"
+            (click)="clearSearch()"
+            type="button"
+            aria-label="Clear search">
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
         </div>
 
         <div class="ap-subbar__spacer"></div>
@@ -250,7 +255,6 @@
       </div>
     </div>
 
-    <!-- Page content -->
     <div class="ap-content">
 
       @if (products().length === 0) {
@@ -264,6 +268,39 @@
           <h3>No products yet</h3>
           <p>Add your first product to get started.</p>
           <button class="ap-btn" (click)="openAddProd()">Add Product</button>
+        </div>
+      }
+
+      <!-- Result count when searching -->
+      @if (productSearch.length > 0 && products().length > 0) {
+        <div style="
+          display:flex; align-items:center; gap:0.5rem;
+          margin-bottom:0.85rem;
+          font-size:0.78rem; color:var(--muted);
+        ">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          @if (filteredProducts().length > 0) {
+            <span>
+              Showing <strong style="color:var(--ink);">{{ filteredProducts().length }}</strong>
+              of {{ products().length }} products for
+              <strong style="color:var(--amber);">"{{ productSearch }}"</strong>
+            </span>
+          } @else {
+            <span>No products match <strong style="color:var(--amber);">"{{ productSearch }}"</strong></span>
+          }
+          <button
+            (click)="clearSearch()"
+            style="
+              margin-left:0.25rem; padding:0.2rem 0.55rem;
+              background:var(--surface-3); border:1px solid var(--border-2);
+              border-radius:20px; font-size:0.70rem; font-weight:500;
+              color:var(--muted); cursor:pointer; transition:all 0.15s;
+              font-family:var(--font);
+            ">
+            Clear
+          </button>
         </div>
       }
 
@@ -351,6 +388,7 @@
           </div>
           <h3>No results found</h3>
           <p>No products match "{{ productSearch }}".</p>
+          <button class="ap-btn" (click)="clearSearch()">Clear Search</button>
         </div>
       }
 
@@ -512,7 +550,7 @@
   </div>
 }
 
-<!-- ═══ SIGN-OUT CONFIRM DIALOG (centered modal) ═══ -->
+<!-- ═══ SIGN-OUT CONFIRM DIALOG ═══ -->
 @if (logoutConfirm()) {
   <div class="ap-logout-overlay" (click)="cancelLogout()"></div>
   <div class="ap-logout-dialog" role="dialog" aria-modal="true">
@@ -534,7 +572,7 @@
   </div>
 }
 
-<!-- ═══ TOAST (feedback only, not sign-out) ═══ -->
+<!-- ═══ TOAST ═══ -->
 @if (toast()) {
   <div class="ap-toast">{{ toast() }}</div>
 }

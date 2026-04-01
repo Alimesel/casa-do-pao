@@ -11,7 +11,6 @@ export class DataService {
   private _loading          = signal(false);
   private _error            = signal<string | null>(null);
 
-  // ── KEY FIX: track whether data was already loaded ──
   private _loaded = false;
 
   readonly loading = this._loading.asReadonly();
@@ -20,13 +19,24 @@ export class DataService {
   get categories(): Category[] { return this.categoriesSignal(); }
   get products(): Product[]    { return this.productsSignal(); }
 
+  // ── FIX: a promise that external callers can await ──
+  // AppComponent and HomeComponent can both await this to know
+  // when real data has arrived from Supabase.
+  readonly dataReady: Promise<void>;
+  private _resolveDataReady!: () => void;
+
   constructor() {
+    this.dataReady = new Promise<void>(resolve => {
+      this._resolveDataReady = resolve;
+    });
     this.loadAll();
   }
 
-  /** Only fetches from Supabase once per app session. */
   async loadAll(force = false): Promise<void> {
-    if (this._loaded && !force) return; // ← skip if already loaded
+    if (this._loaded && !force) {
+      this._resolveDataReady(); // already loaded — resolve immediately
+      return;
+    }
 
     this._loading.set(true);
     this._error.set(null);
@@ -64,10 +74,12 @@ export class DataService {
         }))
       );
 
-      this._loaded = true; // ← mark as loaded
+      this._loaded = true;
+      this._resolveDataReady(); // ← signal to all waiters that data is here
     } catch (err: any) {
       console.error('DataService load error:', err);
       this._error.set(err?.message ?? 'Failed to load data');
+      this._resolveDataReady(); // resolve even on error so we don't hang forever
     } finally {
       this._loading.set(false);
     }
