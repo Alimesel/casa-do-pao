@@ -12,7 +12,6 @@
       <div class="ambient-glow"></div>
 
       <div class="fruit f-left">
-        <!-- fetchpriority="high" + loading="eager" ensures this loads FIRST -->
         <img src="assets/images/strawberry.png" alt="Strawberry"
              loading="eager" fetchpriority="high" decoding="sync" draggable="false">
       </div>
@@ -73,7 +72,6 @@
     <div class="cats-track-wrap">
       <div class="cats-track" #catTrack>
 
-        <!-- FIX: Show skeleton cards while categories are loading -->
         @if (dataService.loading() && dataService.categories.length === 0) {
           @for (i of [1,2,3,4]; track i) {
             <div class="cat-skeleton">
@@ -186,61 +184,66 @@
 
     <div class="featured-grid">
       @for (cat of dataService.categories; track cat.id; let i = $index) {
-        <article class="feat-card reveal" [style.animation-delay]="(i * 0.1) + 's'">
 
-          <div
-            class="feat-img-wrap"
-            [class.flipped]="flippedId() === dataService.getProductsByCategory(cat.id)[0]?.id"
-            (click)="toggleFlip(dataService.getProductsByCategory(cat.id)[0]?.id!)">
+        <!-- NG8107 FIX: assign array[0] to a local variable to avoid
+             optional-chaining on a guaranteed-non-null array element -->
+        @if (dataService.getProductsByCategory(cat.id)[0]; as product) {
+          <article class="feat-card reveal" [style.animation-delay]="(i * 0.1) + 's'">
 
-            <img
-              [src]="dataService.getProductsByCategory(cat.id)[0]?.image"
-              [alt]="dataService.getProductsByCategory(cat.id)[0]?.name"
-              class="feat-img"
-              loading="lazy">
+            <div
+              class="feat-img-wrap"
+              [class.flipped]="flippedId() === product.id"
+              (click)="toggleFlip(product.id)">
 
-            <span class="feat-cat-pill">{{ cat.name }}</span>
+              <img
+                [src]="product.image"
+                [alt]="product.name"
+                class="feat-img"
+                loading="lazy">
 
-            @if (dataService.getProductsByCategory(cat.id)[0]?.badge) {
-              <span class="feat-badge">{{ dataService.getProductsByCategory(cat.id)[0]?.badge }}</span>
-            }
+              <span class="feat-cat-pill">{{ cat.name }}</span>
 
-            <div class="feat-overlay">
-              <a
-                [routerLink]="['/products', cat.id]"
-                class="feat-more-btn"
-                (click)="$event.stopPropagation()">
-                More {{ cat.name }}
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-            </div>
-
-          </div>
-
-          <div class="feat-info">
-            <div class="feat-meta">
-              <span class="feat-price">€{{ dataService.getProductsByCategory(cat.id)[0]?.price?.toFixed(2) }}</span>
-            </div>
-            <h3 class="feat-name">{{ dataService.getProductsByCategory(cat.id)[0]?.name }}</h3>
-            <p  class="feat-desc">{{ dataService.getProductsByCategory(cat.id)[0]?.description }}</p>
-
-            <button
-              class="feat-add-btn"
-              [class.added]="addedId() === dataService.getProductsByCategory(cat.id)[0]?.id"
-              (click)="addToCart(dataService.getProductsByCategory(cat.id)[0]!)">
-              @if (addedId() === dataService.getProductsByCategory(cat.id)[0]?.id) {
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                Added!
-              } @else {
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Add to Order
+              @if (product.badge) {
+                <span class="feat-badge">{{ product.badge }}</span>
               }
-            </button>
-          </div>
 
-        </article>
+              <div class="feat-overlay">
+                <a
+                  [routerLink]="['/products', cat.id]"
+                  class="feat-more-btn"
+                  (click)="$event.stopPropagation()">
+                  More {{ cat.name }}
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </a>
+              </div>
+
+            </div>
+
+            <div class="feat-info">
+              <div class="feat-meta">
+                <span class="feat-price">€{{ product.price.toFixed(2) }}</span>
+              </div>
+              <h3 class="feat-name">{{ product.name }}</h3>
+              <p  class="feat-desc">{{ product.description }}</p>
+
+              <button
+                class="feat-add-btn"
+                [class.added]="addedId() === product.id"
+                (click)="addToCart(product)">
+                @if (addedId() === product.id) {
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Added!
+                } @else {
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Add to Order
+                }
+              </button>
+            </div>
+
+          </article>
+        }
       }
     </div>
 

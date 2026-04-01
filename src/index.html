@@ -7,26 +7,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <!--
-    ╔══════════════════════════════════════════════════════╗
-    ║  CRITICAL PERFORMANCE FIX: Preload hero images       ║
-    ║  These load BEFORE Angular boots, so images appear   ║
-    ║  instantly the moment the page renders.              ║
-    ╚══════════════════════════════════════════════════════╝
-  -->
-  <link rel="preload" as="image" href="assets/images/donut.png" fetchpriority="high">
-  <link rel="preload" as="image" href="assets/images/strawberry.png" fetchpriority="high">
-  <link rel="preload" as="image" href="assets/images/oneberry1.webp" fetchpriority="high" type="image/webp">
+  <!-- Preload hero images so they are in browser cache before Angular renders -->
+  <link rel="preload" as="image" href="assets/images/donut.png"       fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/chocodonut.png"  fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/strawberry.png"  fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/oneberry1.webp"  fetchpriority="high" type="image/webp">
 
-  <!--
-    DNS prefetch for Supabase so the DB connection starts earlier.
-    Replace YOUR_PROJECT_ID with your actual Supabase project subdomain.
-  -->
-  <link rel="preconnect" href="https://YOUR_PROJECT_ID.supabase.co">
-  <link rel="dns-prefetch" href="https://YOUR_PROJECT_ID.supabase.co">
+  <!-- DNS prefetch for Supabase -->
+  <link rel="preconnect" href="https://imtxhzadwvvasaydrpou.supabase.co">
+  <link rel="dns-prefetch" href="https://imtxhzadwvvasaydrpou.supabase.co">
 
+  <!-- Preload Google Fonts to avoid FOUT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <style>
+    /* ── FULL-SCREEN SPLASH LOADER ──────────────────────────────
+       Shown immediately, before Angular JS even parses.
+       app-root removes it once the app is ready.
+    ─────────────────────────────────────────────────────────── */
+    #app-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #FAFAF6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.6rem;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+    #app-splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .splash-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .splash-logo img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+    }
+    .splash-name {
+      font-family: 'Georgia', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: #2E2923;
+      letter-spacing: 0.04em;
+    }
+    .splash-tag {
+      font-family: system-ui, sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #B08A5A;
+    }
+    .splash-bar-wrap {
+      width: 140px;
+      height: 2px;
+      background: #E8D9C4;
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .splash-bar {
+      height: 100%;
+      background: #B5781F;
+      border-radius: 1px;
+      animation: splashFill 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes splashFill {
+      from { width: 0; }
+      to   { width: 100%; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- SPLASH: visible instantly, hidden once Angular calls hideSplash() -->
+  <div id="app-splash">
+    <div class="splash-logo">
+      <img src="assets/images/logo.png" alt="Casa do Pão logo">
+      <span class="splash-name">Casa do Pão</span>
+      <span class="splash-tag">Artisan Sweet Shop</span>
+    </div>
+    <div class="splash-bar-wrap">
+      <div class="splash-bar"></div>
+    </div>
+  </div>
+
   <app-root></app-root>
+
+  <script>
+    /* Called by AppComponent once Angular is bootstrapped and data is ready */
+    window.hideSplash = function() {
+      var el = document.getElementById('app-splash');
+      if (el) {
+        el.classList.add('hidden');
+        setTimeout(function() { el.remove(); }, 400);
+      }
+    };
+  </script>
 </body>
 </html>
