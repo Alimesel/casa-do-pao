@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd, PreloadAllModules } from '@angular/router';
 import { DataService } from './services/data.service';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { filter } from 'rxjs/operators';
-import { CartSidebarComponent } from "./components/cart-sidebar/cart-sidebar.component";
+import { CartSidebarComponent } from './components/cart-sidebar/cart-sidebar.component';
 
 @Component({
   selector: 'app-root',
@@ -14,19 +14,16 @@ import { CartSidebarComponent } from "./components/cart-sidebar/cart-sidebar.com
   template: `
     @if (isAdminRoute) {
       <router-outlet />
-    } @else if (dataService.loading()) {
-      <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#8B5E3C;">
-        Loading…
-      </div>
     } @else if (dataService.error()) {
       <div style="display:flex;align-items:center;justify-content:center;height:100vh;color:red;">
         {{ dataService.error() }}
       </div>
     } @else {
+      <!-- Show navbar/footer/shell immediately, even while data loads -->
       <app-navbar />
       <router-outlet />
       <app-footer />
-      <app-cart-sidebar/>
+      <app-cart-sidebar />
     }
   `
 })

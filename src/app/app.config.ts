@@ -1,6 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideRouter, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -8,8 +7,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,
-      withInMemoryScrolling({ scrollPositionRestoration: 'top' })
-    ),
-    provideAnimations()
+      // ── KEY FIX: preload ALL lazy routes in the background immediately ──
+      // This means when user taps a nav link, the chunk is already downloaded
+      withPreloading(PreloadAllModules),
+      // Smooth page transitions (Angular 17+)
+      withViewTransitions()
+    )
   ]
 };

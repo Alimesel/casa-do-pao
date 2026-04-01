@@ -6,11 +6,13 @@ import { Category, Product } from '../models/product.model';
 export class DataService {
   private supabase = inject(SupabaseService);
 
-  // ← now PUBLIC so admin panel can read them directly
   readonly categoriesSignal = signal<Category[]>([]);
   readonly productsSignal   = signal<Product[]>([]);
   private _loading          = signal(false);
   private _error            = signal<string | null>(null);
+
+  // ── KEY FIX: track whether data was already loaded ──
+  private _loaded = false;
 
   readonly loading = this._loading.asReadonly();
   readonly error   = this._error.asReadonly();
@@ -22,7 +24,10 @@ export class DataService {
     this.loadAll();
   }
 
-  async loadAll(): Promise<void> {
+  /** Only fetches from Supabase once per app session. */
+  async loadAll(force = false): Promise<void> {
+    if (this._loaded && !force) return; // ← skip if already loaded
+
     this._loading.set(true);
     this._error.set(null);
 
@@ -58,6 +63,8 @@ export class DataService {
           badge:       r.badge    ?? undefined
         }))
       );
+
+      this._loaded = true; // ← mark as loaded
     } catch (err: any) {
       console.error('DataService load error:', err);
       this._error.set(err?.message ?? 'Failed to load data');

@@ -12,19 +12,20 @@
       <div class="ambient-glow"></div>
 
       <div class="fruit f-left">
+        <!-- fetchpriority="high" + loading="eager" ensures this loads FIRST -->
         <img src="assets/images/strawberry.png" alt="Strawberry"
-             loading="eager" fetchpriority="high" draggable="false">
+             loading="eager" fetchpriority="high" decoding="sync" draggable="false">
       </div>
 
       <div class="donut-rig">
         <div class="card">
           <div class="d-face d-back">
             <img src="assets/images/chocodonut.png" alt="Donut base"
-                 loading="eager" fetchpriority="high" draggable="false">
+                 loading="eager" fetchpriority="high" decoding="sync" draggable="false">
           </div>
           <div class="d-face d-front">
             <img src="assets/images/donut.png" alt="Donut"
-                 loading="eager" fetchpriority="high" draggable="false">
+                 loading="eager" fetchpriority="high" decoding="sync" draggable="false">
           </div>
         </div>
         <div class="ground-shd"></div>
@@ -32,7 +33,7 @@
 
       <div class="fruit f-right">
         <img src="assets/images/oneberry1.webp" alt="Blueberry"
-             loading="eager" fetchpriority="high" draggable="false">
+             loading="eager" fetchpriority="high" decoding="sync" draggable="false">
       </div>
 
     </div>
@@ -71,6 +72,21 @@
 
     <div class="cats-track-wrap">
       <div class="cats-track" #catTrack>
+
+        <!-- FIX: Show skeleton cards while categories are loading -->
+        @if (dataService.loading() && dataService.categories.length === 0) {
+          @for (i of [1,2,3,4]; track i) {
+            <div class="cat-skeleton">
+              <div class="cat-skel-img"></div>
+              <div class="cat-skel-info">
+                <span class="s1"></span>
+                <span class="s2"></span>
+                <span class="s3"></span>
+              </div>
+            </div>
+          }
+        }
+
         @for (cat of dataService.categories; track cat.id; let i = $index) {
           <a [routerLink]="['/products', cat.id]" class="cat-card">
             <div class="cat-card-img">

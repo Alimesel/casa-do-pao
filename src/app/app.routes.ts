@@ -48,6 +48,7 @@ export const routes: Routes = [
     path: 'admin',
     loadComponent: () =>
       import('./pages/admin-panel/admin-panel.component').then(m => m.AdminPanelComponent),
+    // canActivate (not canLoad) so PreloadAllModules can still preload this chunk
     canActivate: [adminGuard],
     title: 'Admin Panel — Casa do Pão'
   },

@@ -1,5 +1,5 @@
 /* ================================================================
-   HOME PAGE SCSS
+   HOME PAGE SCSS — PERFORMANCE OPTIMIZED
    ================================================================ */
 
 /* ── HERO ── */
@@ -29,19 +29,21 @@
   to   { opacity: 0.90; transform: translate(-50%,-50%) scale(1.08); }
 }
 .donut-rig { position: relative; z-index: 2; }
+
+/* ── KEY FIX: Images are ALWAYS VISIBLE (opacity:1), animation is purely cosmetic ── */
 .card {
   width: 270px; height: 270px; position: relative;
-  /* starts visible immediately — no opacity:0 */
-  animation: donutAppear 1.2s cubic-bezier(0.34,1.18,0.64,1) 0s both,
-             floatDonut  4.2s ease-in-out 1.5s infinite;
+  /* animation starts from visible state, just adds a nice entrance */
+  animation: donutAppear 0.8s cubic-bezier(0.34,1.18,0.64,1) 0s both,
+             floatDonut  4.2s ease-in-out 1.0s infinite;
 }
 .d-face {
   position: absolute; inset: 0; border-radius: 50%; overflow: hidden;
   img {
     width: 100%; height: 100%; object-fit: cover; display: block;
     mix-blend-mode: multiply;
-    /* always visible — no hidden state */
-    opacity: 1;
+    /* CRITICAL: always visible, never hidden — opacity must be 1 at all times */
+    opacity: 1 !important;
   }
 }
 .d-back  { display: none; }
@@ -51,12 +53,13 @@
   width: 200px; height: 28px;
   background: radial-gradient(ellipse, rgba(80,42,12,0.28) 0%, transparent 70%);
   filter: blur(10px); pointer-events: none;
-  animation: shadowBob 4.2s ease-in-out 1.5s infinite;
+  animation: shadowBob 4.2s ease-in-out 1.0s infinite;
 }
+
+/* ── FIX: Donut animation starts from 0.7 opacity so it's always partially visible ── */
 @keyframes donutAppear {
-  0%   { transform: scale(0.4) translateY(60px); opacity: 0.3; }
-  60%  { transform: scale(1.08) translateY(-8px); opacity: 1; }
-  80%  { transform: scale(0.97) translateY(4px); }
+  0%   { transform: scale(0.7) translateY(30px); opacity: 0.7; }
+  60%  { transform: scale(1.05) translateY(-5px); opacity: 1; }
   100% { transform: scale(1.00) translateY(0); opacity: 1; }
 }
 @keyframes floatDonut {
@@ -68,7 +71,7 @@
   50%      { transform: translateX(-50%) scaleX(0.80); opacity: 0.40; }
 }
 
-/* ── Fruit images — always visible from the start ── */
+/* ── Fruit images — ALWAYS VISIBLE, no opacity:0 ever ── */
 .fruit {
   position: absolute; top: 50%; z-index: 4;
   img {
@@ -76,41 +79,43 @@
     mix-blend-mode: multiply;
     filter: drop-shadow(0 10px 22px rgba(55,22,4,0.35));
     user-select: none; -webkit-user-drag: none;
-    /* critical: always visible, never hidden */
-    opacity: 1;
+    /* CRITICAL: never hidden */
+    opacity: 1 !important;
   }
 }
 .f-left {
   left: -1px !important;
   img { width: 115px; height: 115px; }
-  animation: fruitLeft 1.0s cubic-bezier(0.34,1.18,0.64,1) 0.1s both,
-             floatLeft 3.4s ease-in-out 1.5s infinite;
+  /* FIX: animation starts from opacity 0.5 so fruit is visible immediately */
+  animation: fruitLeft 0.8s cubic-bezier(0.34,1.18,0.64,1) 0s both,
+             floatLeft 3.4s ease-in-out 1.0s infinite;
 }
 .f-right {
   right: 7px !important;
   img { width: 115px; height: 115px; }
-  animation: fruitRight 1.0s cubic-bezier(0.34,1.18,0.64,1) 0.1s both,
-             floatRight 3.0s ease-in-out 1.5s infinite;
+  animation: fruitRight 0.8s cubic-bezier(0.34,1.18,0.64,1) 0s both,
+             floatRight 3.0s ease-in-out 1.0s infinite;
 }
+
+/* FIX: Start from 0.5 opacity so images show immediately, just slide in */
 @keyframes fruitLeft {
-  0%   { transform: translateX(-120px) translateY(-50%) rotate(-22deg) scale(0.6); opacity: 0.2; }
-  65%  { transform: translateX(8px)    translateY(-50%) rotate(-2deg)  scale(1.06); opacity: 1; }
-  100% { transform: translateX(0)      translateY(-50%) rotate(-6deg)  scale(1);    opacity: 1; }
+  0%   { transform: translateX(-60px) translateY(-50%) rotate(-22deg) scale(0.8); opacity: 0.5; }
+  65%  { transform: translateX(5px)   translateY(-50%) rotate(-2deg)  scale(1.04); opacity: 1; }
+  100% { transform: translateX(0)     translateY(-50%) rotate(-6deg)  scale(1);    opacity: 1; }
 }
 @keyframes fruitRight {
-  0%   { transform: translateX(120px)  translateY(-50%) rotate(22deg)  scale(0.6); opacity: 0.2; }
-  65%  { transform: translateX(-8px)   translateY(-50%) rotate(2deg)   scale(1.06); opacity: 1; }
-  100% { transform: translateX(0)      translateY(-50%) rotate(6deg)   scale(1);    opacity: 1; }
+  0%   { transform: translateX(60px)  translateY(-50%) rotate(22deg)  scale(0.8); opacity: 0.5; }
+  65%  { transform: translateX(-5px)  translateY(-50%) rotate(2deg)   scale(1.04); opacity: 1; }
+  100% { transform: translateX(0)     translateY(-50%) rotate(6deg)   scale(1);    opacity: 1; }
 }
 @keyframes floatLeft  { 0%,100% { transform: translateX(0) translateY(-50%) rotate(-6deg); } 50% { transform: translateX(0) translateY(calc(-50% - 7px)) rotate(-4deg); } }
 @keyframes floatRight { 0%,100% { transform: translateX(0) translateY(-50%) rotate(6deg);  } 50% { transform: translateX(0) translateY(calc(-50% - 6px)) rotate(4deg);  } }
 
 .hero-copy {
   text-align: center; max-width: 520px; margin-top: 2.2rem;
-  /* visible immediately, just fades in fast */
-  animation: fadeUp 0.5s ease-out 0s both;
+  animation: fadeUp 0.4s ease-out 0s both;
 }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0.3; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .headline {
   font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.8rem);
   font-weight: 300; color: var(--text-dark); line-height: 1.12; letter-spacing: 0.02em; margin-bottom: 2.6rem;
@@ -128,7 +133,7 @@
 .scroll-hint {
   position: absolute; bottom: 1.8rem; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center;
-  z-index: 10; animation: fadeUp 1s ease 1.0s both;
+  z-index: 10; animation: fadeUp 1s ease 0.8s both;
 }
 .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--brown-300), transparent); animation: scrollPulse 2s ease-in-out infinite; }
 @keyframes scrollPulse { 0%,100% { transform: scaleY(1); opacity: 0.45; } 50% { transform: scaleY(0.6); opacity: 1; } }
@@ -155,6 +160,21 @@
 .arrow-next { right: 0.6rem; }
 .cats-track-wrap { width: 100%; overflow: hidden; }
 .cats-track { display: flex; gap: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
+
+/* ── FIX: Category skeleton shown while data loads ── */
+.cat-skeleton {
+  flex: 0 0 50%; aspect-ratio: 3/4; background: #f5f0eb;
+  display: flex; flex-direction: column;
+  .cat-skel-img { flex: 0 0 72%; background: linear-gradient(90deg, #f0e8e0 25%, #f8f3ee 50%, #f0e8e0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+  .cat-skel-info { flex: 0 0 28%; padding: 1.4rem 1.8rem; display: flex; flex-direction: column; gap: 0.6rem;
+    span { display: block; border-radius: 4px; background: linear-gradient(90deg, #f0e8e0 25%, #f8f3ee 50%, #f0e8e0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    .s1 { height: 10px; width: 40%; }
+    .s2 { height: 18px; width: 65%; }
+    .s3 { height: 10px; width: 55%; }
+  }
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
 .cat-card {
   flex: 0 0 50%; aspect-ratio: 3/4; scroll-snap-align: start;
   text-decoration: none; display: flex; flex-direction: column;
@@ -238,14 +258,14 @@
 .ribbon-icon { color: var(--brown-400); margin-top: 2px; flex-shrink: 0; }
 .ribbon-divider { width: 1px; height: 60px; background: var(--border-light); @media (max-width: 700px) { display: none; } }
 
-/* ── REVEAL — only for below-fold sections, not hero ── */
+/* ── REVEAL — only for below-fold sections ── */
 .reveal, .reveal-left, .reveal-right {
   opacity: 0;
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
 }
-.reveal       { transform: translateY(20px); }
-.reveal-left  { transform: translateX(-24px); }
-.reveal-right { transform: translateX(24px); }
+.reveal       { transform: translateY(16px); }
+.reveal-left  { transform: translateX(-20px); }
+.reveal-right { transform: translateX(20px); }
 .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
 
 /* ── RESPONSIVE ── */
