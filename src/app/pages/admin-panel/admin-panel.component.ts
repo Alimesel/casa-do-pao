@@ -66,6 +66,15 @@ export class AdminPanelComponent implements OnInit {
       this.loadError.set(this.ds.error() ?? '');
     }
   }
+  mobileMenuOpen = signal(false);
+
+toggleMobileMenu() {
+  this.mobileMenuOpen.update(v => !v);
+}
+
+closeMobileMenu() {
+  this.mobileMenuOpen.set(false);
+}
 
   // ── Navbar dropdown ───────────────────────
   toggleMgmt() { this.mgmtOpen.update(v => !v); }
