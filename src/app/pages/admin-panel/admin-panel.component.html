@@ -78,39 +78,109 @@
 
       <!-- Hamburger — mobile only -->
       <button
-  class="ap-nav__burger"
-  [class.is-open]="mobileMenuOpen()"
-  (click)="toggleMobileMenu()"
-  aria-label="Open menu"
-  [attr.aria-expanded]="mobileMenuOpen()">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
+        class="ap-nav__burger"
+        [class.is-open]="mobileMenuOpen()"
+        (click)="toggleMobileMenu()"
+        aria-label="Open menu"
+        [attr.aria-expanded]="mobileMenuOpen()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
     </div>
   </nav>
+
+  <!-- ═══ MOBILE MENU ═══ -->
   @if (mobileMenuOpen()) {
-  <div class="ap-mobile-menu">
+    <div class="ap-mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
 
-    <button (click)="setTab('categories'); closeMobileMenu()">
-      Categories
-      <span>{{ categories().length }}</span>
-    </button>
+      <!-- Header -->
+      <div class="ap-mobile-menu__header">
+        <div class="ap-mobile-menu__brand">
+          <div class="ap-mobile-menu__avatar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+              <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+            </svg>
+          </div>
+          <div class="ap-mobile-menu__brand-text">
+            <span class="ap-mobile-menu__brand-name">Admin Panel</span>
+            <span class="ap-mobile-menu__brand-sub">Casa do Pão</span>
+          </div>
+        </div>
+        <button class="ap-mobile-menu__close" (click)="closeMobileMenu()" aria-label="Close menu">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
 
-    <button (click)="setTab('products'); closeMobileMenu()">
-      Products
-      <span>{{ products().length }}</span>
-    </button>
+      <!-- Section label -->
+      <div class="ap-mobile-menu__section-label">Content</div>
 
-    <button class="danger" (click)="requestLogout(); closeMobileMenu()">
-      Sign Out
-    </button>
+      <!-- Nav items -->
+      <div class="ap-mobile-menu__nav">
 
-  </div>
+        <button
+          class="ap-mobile-menu__item"
+          [class.is-active]="activeTab() === 'categories'"
+          (click)="setTab('categories'); closeMobileMenu()">
+          <span class="ap-mobile-menu__item-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            </svg>
+          </span>
+          <span class="ap-mobile-menu__item-label">Categories</span>
+          <span class="ap-mobile-menu__item-count">{{ categories().length }}</span>
+          <svg class="ap-mobile-menu__item-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
 
-  <div class="ap-mobile-backdrop" (click)="closeMobileMenu()"></div>
-}
+        <button
+          class="ap-mobile-menu__item"
+          [class.is-active]="activeTab() === 'products'"
+          (click)="setTab('products'); closeMobileMenu()">
+          <span class="ap-mobile-menu__item-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+              <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+            </svg>
+          </span>
+          <span class="ap-mobile-menu__item-label">Products</span>
+          <span class="ap-mobile-menu__item-count">{{ products().length }}</span>
+          <svg class="ap-mobile-menu__item-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+
+      </div>
+
+      <!-- Divider -->
+      <div class="ap-mobile-menu__divider"></div>
+
+      
+
+      <!-- Sign out -->
+      <div class="ap-mobile-menu__footer">
+        <button class="ap-mobile-menu__signout" (click)="requestLogout(); closeMobileMenu()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sign Out
+        </button>
+      </div>
+
+    </div>
+
+    <div class="ap-mobile-backdrop" (click)="closeMobileMenu()"></div>
+  }
 
   <!-- ═══ LOADING / ERROR ═══ -->
   @if (loading()) {
