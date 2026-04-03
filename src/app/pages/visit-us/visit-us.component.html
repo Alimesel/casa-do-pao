@@ -17,7 +17,7 @@
 
     <!-- Label + dots row -->
     <div class="v-carousel__header">
-      <span class="v-section-label">Inside the Café</span>
+      <span class="v-section-label">Dentro do Café</span>
       <div class="v-carousel__dots">
         @for (img of images; track img.src; let i = $index) {
           <button
@@ -51,7 +51,7 @@
                   <line x1="11" y1="8" x2="11" y2="14"/>
                   <line x1="8" y1="11" x2="14" y2="11"/>
                 </svg>
-                Tap to expand
+                Toque para expandir
               </span>
             </div>
           </div>
@@ -74,7 +74,7 @@
   <section class="v-map-section">
     <div class="v-map-inner">
       <div class="v-map-label-row">
-        <span class="v-section-label">Find Us</span>
+        <span class="v-section-label">Encontre-nos</span>
       </div>
       <div class="v-map-wrap">
         <a
@@ -90,7 +90,7 @@
               <polyline points="15 3 21 3 21 9"/>
               <line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
-            Open in Google Maps
+            Abrir no Google Maps
           </div>
         </a>
 
@@ -124,7 +124,7 @@
     <div class="v-info__inner">
 
       <div class="v-info__col">
-        <span class="v-label">Our Location</span>
+        <span class="v-label">A Nossa Localização</span>
         <address class="v-address">
           da granja do pessube<br>
           Bissau, Guiné-Bissau
@@ -136,14 +136,14 @@
                stroke="currentColor" stroke-width="1.8">
             <polygon points="3 11 22 2 13 21 11 13 3 11"/>
           </svg>
-          Get Directions
+         Obter Direções
         </a>
       </div>
 
       <div class="v-info__vr" aria-hidden="true"></div>
 
       <div class="v-info__col">
-        <span class="v-label">Opening Hours</span>
+        <span class="v-label">Horário de Funcionamento</span>
         <ul class="v-hours">
           @for (hour of hours; track hour.day; let i = $index) {
             <li class="v-hours__row" [class.v-hours__row--today]="i === todayIndex">
@@ -151,7 +151,7 @@
               <span class="v-hours__dots"></span>
               <span class="v-hours__time">{{ hour.time }}</span>
               @if (i === todayIndex) {
-                <span class="v-hours__pill">Today</span>
+                <span class="v-hours__pill">Hoje</span>
               }
             </li>
           }
@@ -161,19 +161,19 @@
       <div class="v-info__vr" aria-hidden="true"></div>
 
       <div class="v-info__col">
-        <span class="v-label">Contact</span>
+        <span class="v-label">Contacto</span>
         <div class="v-contact-rows">
           <div class="v-contact-row">
-            <span class="v-contact-row__key">Phone</span>
+            <span class="v-contact-row__key">Telefone</span>
             <span class="v-contact-row__val">+245 955 000 000</span>
           </div>
           <div class="v-contact-row">
-            <span class="v-contact-row__key">Reservations</span>
-            <span class="v-contact-row__val">Walk-in &amp; by phone</span>
+            <span class="v-contact-row__key">Reservas</span>
+            <span class="v-contact-row__val">Chegada direta &amp; por telefone</span>
           </div>
           <div class="v-contact-row">
-            <span class="v-contact-row__key">Custom Cakes</span>
-            <span class="v-contact-row__val">Orders welcome</span>
+            <span class="v-contact-row__key">Sobremesas Personalizadas</span>
+            <span class="v-contact-row__val">Encomendas bem-vindas</span>
           </div>
         </div>
       </div>

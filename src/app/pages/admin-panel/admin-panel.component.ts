@@ -25,33 +25,40 @@ export class AdminPanelComponent implements OnInit {
   products     = this.ds.productsSignal;
   loading      = this.ds.loading;
 
-  loadError     = signal('');
-  activeTab     = signal<AdminTab>('categories');
-  modalType     = signal<ModalType>(null);
-  saving        = signal(false);
-  deleting      = signal<string | number | null>(null);
-  toast         = signal('');
-  uploadingImg  = signal(false);
+  loadError      = signal('');
+  activeTab      = signal<AdminTab>('categories');
+  modalType      = signal<ModalType>(null);
+  saving         = signal(false);
+  deleting       = signal<string | number | null>(null);
+  toast          = signal('');
+  uploadingImg   = signal(false);
+  navScrolled    = signal(false);
+  mgmtOpen       = signal(false);
+  logoutConfirm  = signal(false);
+  mobileMenuOpen = signal(false);
 
-  /** Management navbar dropdown */
-  mgmtOpen      = signal(false);
-
-  /** Sign-out confirmation dialog */
-  logoutConfirm = signal(false);
-
-  /** Product search */
-  productSearch = '';
+  // ── Search & Category Filter ──────────────
+  productSearch       = '';
   private _searchTerm = signal('');
+  selectedCategoryId  = signal<string>('');
 
   filteredProducts = computed(() => {
-    const term = this._searchTerm().toLowerCase().trim();
-    if (!term) return this.products();
-    return this.products().filter(p =>
-      p.name.toLowerCase().includes(term) ||
-      (p.description ?? '').toLowerCase().includes(term) ||
-      (p.badge ?? '').toLowerCase().includes(term) ||
-      (this.ds.getCategoryById(p.categoryId)?.name ?? '').toLowerCase().includes(term)
-    );
+    const term  = this._searchTerm().toLowerCase().trim();
+    const catId = this.selectedCategoryId();
+    let list    = this.products();
+
+    if (catId) {
+      list = list.filter(p => p.categoryId === catId);
+    }
+    if (term) {
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(term) ||
+        (p.description ?? '').toLowerCase().includes(term) ||
+        (p.badge ?? '').toLowerCase().includes(term) ||
+        (this.ds.getCategoryById(p.categoryId)?.name ?? '').toLowerCase().includes(term)
+      );
+    }
+    return list;
   });
 
   private toastTimer?: ReturnType<typeof setTimeout>;
@@ -61,29 +68,26 @@ export class AdminPanelComponent implements OnInit {
   prodForm = { id: 0, name: '', description: '', price: 0, categoryId: '', image: '', featured: false, badge: '' };
   editingId: string | number | null = null;
 
-  ngOnInit() {
-    if (this.ds.error()) {
-      this.loadError.set(this.ds.error() ?? '');
-    }
+  async ngOnInit() {
+    await this.loadAll();
   }
-  mobileMenuOpen = signal(false);
 
-toggleMobileMenu() {
-  this.mobileMenuOpen.update(v => !v);
-}
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.navScrolled.set(window.scrollY > 40);
+  }
 
-closeMobileMenu() {
-  this.mobileMenuOpen.set(false);
-}
+  // ── Mobile menu ───────────────────────────
+  toggleMobileMenu() { this.mobileMenuOpen.update(v => !v); }
+  closeMobileMenu()  { this.mobileMenuOpen.set(false); }
 
   // ── Navbar dropdown ───────────────────────
   toggleMgmt() { this.mgmtOpen.update(v => !v); }
   closeMgmt()  { this.mgmtOpen.set(false); }
 
-  // ── Sign-out (dialog, not toast) ──────────
+  // ── Sign-out ──────────────────────────────
   requestLogout() {
     this.logoutConfirm.set(true);
-    // Auto-cancel after 10s
     clearTimeout(this.logoutTimer);
     this.logoutTimer = setTimeout(() => this.cancelLogout(), 10000);
   }
@@ -100,12 +104,12 @@ closeMobileMenu() {
     this.logoutConfirm.set(false);
   }
 
-  // ── Data ─────────────────────────────────
-  async loadAll() {
-    this.loadError.set('');
-    await this.ds.loadAll();
-    if (this.ds.error()) this.loadError.set(this.ds.error() ?? '');
-  }
+  // ── Data ──────────────────────────────────
+ async loadAll() {
+  this.loadError.set('');
+  await this.ds.loadAll(true);   // <-- add true here
+  if (this.ds.error()) this.loadError.set(this.ds.error() ?? '');
+}
 
   getCategoryById(id: string): Category | undefined {
     return this.ds.getCategoryById(id);
@@ -119,16 +123,30 @@ closeMobileMenu() {
     return this.products().filter(p => p.featured).length;
   }
 
-  // ── Search ────────────────────────────────
-  onSearchChange(value: string) {
-    this._searchTerm.set(value);
-  }
+  // ── Search & filter ───────────────────────
+  onSearchChange(value: string) { this._searchTerm.set(value); }
 
-  // ── Tab ──────────────────────────────────
-  setTab(tab: AdminTab) {
-    this.activeTab.set(tab);
+  clearSearch(): void {
     this.productSearch = '';
     this._searchTerm.set('');
+  }
+
+  setCategoryFilter(catId: string) { this.selectedCategoryId.set(catId); }
+
+  clearFilters(): void {
+    this.productSearch = '';
+    this._searchTerm.set('');
+    this.selectedCategoryId.set('');
+  }
+
+  get hasActiveFilters(): boolean {
+    return this.productSearch.length > 0 || this.selectedCategoryId() !== '';
+  }
+
+  // ── Tab ───────────────────────────────────
+  setTab(tab: AdminTab) {
+    this.activeTab.set(tab);
+    this.clearFilters();
   }
 
   // ── Category ID auto-gen ──────────────────
@@ -153,7 +171,7 @@ closeMobileMenu() {
   }
 
   openEditCat(cat: Category) {
-    this.catForm   = {
+    this.catForm = {
       id:          cat.id,
       name:        cat.name,
       subtitle:    cat.subtitle    ?? '',
@@ -173,7 +191,7 @@ closeMobileMenu() {
   }
 
   openEditProd(p: Product) {
-    this.prodForm  = {
+    this.prodForm = {
       id:          p.id,
       name:        p.name,
       description: p.description ?? '',
@@ -242,7 +260,7 @@ closeMobileMenu() {
       if (result.error) { this.showToast('Error: ' + result.error.message); return; }
       this.showToast(this.editingId ? 'Category updated ✓' : 'Category added ✓');
       this.closeModal();
-      await this.ds.loadAll();
+      await this.loadAll();
     } catch (err: any) {
       this.showToast('Unexpected error: ' + (err?.message ?? err));
     } finally {
@@ -259,60 +277,47 @@ closeMobileMenu() {
       const result = await this.supabase.client.from('categories').delete().eq('id', id).select();
       if (result.error) { this.showToast('Error: ' + result.error.message); return; }
       this.showToast('Category deleted');
-      await this.ds.loadAll();
+      await this.loadAll();
     } catch (err: any) {
       this.showToast('Unexpected error: ' + (err?.message ?? err));
     } finally {
       this.deleting.set(null);
     }
   }
-  // ── Search clear ──────────────────────────
-clearSearch(): void {
-  this.productSearch = '';
-  this._searchTerm.set('');
-}
-// Add to class properties:
-navScrolled = signal(false);
 
-// Add HostListener (import HostListener from @angular/core):
-@HostListener('window:scroll')
-onScroll(): void {
-  this.navScrolled.set(window.scrollY > 40);
-}
   // ── Save product ──────────────────────────
   async saveProd() {
-  if (!this.prodForm.name?.trim() || !this.prodForm.categoryId) {
-    this.showToast('Name and Category are required.');
-    return;
+    if (!this.prodForm.name?.trim() || !this.prodForm.categoryId) {
+      this.showToast('Name and Category are required.');
+      return;
+    }
+    this.saving.set(true);
+
+    const row = {
+      name:        this.prodForm.name.trim(),
+      description: this.prodForm.description || null,
+      price:       Number(this.prodForm.price),
+      category_id: this.prodForm.categoryId,
+      image:       this.prodForm.image       || null,
+      featured:    this.prodForm.featured,
+      badge:       this.prodForm.badge?.trim() || null
+    };
+
+    try {
+      const result = this.editingId
+        ? await this.supabase.client.from('products').update(row).eq('id', this.editingId).select()
+        : await this.supabase.client.from('products').insert(row).select();
+
+      if (result.error) { this.showToast('Error: ' + result.error.message); return; }
+      this.showToast(this.editingId ? 'Product updated ✓' : 'Product added ✓');
+      this.closeModal();
+      await this.loadAll();
+    } catch (err: any) {
+      this.showToast('Unexpected error: ' + (err?.message ?? err));
+    } finally {
+      this.saving.set(false);
+    }
   }
-  this.saving.set(true);
-
-  const row = {
-    name:        this.prodForm.name.trim(),
-    description: this.prodForm.description || null,
-    price:       Number(this.prodForm.price),
-    category_id: this.prodForm.categoryId,
-    image:       this.prodForm.image       || null,
-    featured:    this.prodForm.featured,
-    badge:       this.prodForm.badge?.trim() || null
-    // ✅ No 'id' here — Supabase will auto-generate it
-  };
-
-  try {
-    const result = this.editingId
-      ? await this.supabase.client.from('products').update(row).eq('id', this.editingId).select()
-      : await this.supabase.client.from('products').insert(row).select();
-
-    if (result.error) { this.showToast('Error: ' + result.error.message); return; }
-    this.showToast(this.editingId ? 'Product updated ✓' : 'Product added ✓');
-    this.closeModal();
-    await this.ds.loadAll();
-  } catch (err: any) {
-    this.showToast('Unexpected error: ' + (err?.message ?? err));
-  } finally {
-    this.saving.set(false);
-  }
-}
 
   // ── Delete product ────────────────────────
   async deleteProd(id: number) {
@@ -323,7 +328,7 @@ onScroll(): void {
       const result = await this.supabase.client.from('products').delete().eq('id', id).select();
       if (result.error) { this.showToast('Error: ' + result.error.message); return; }
       this.showToast('Product deleted');
-      await this.ds.loadAll();
+      await this.loadAll();
     } catch (err: any) {
       this.showToast('Unexpected error: ' + (err?.message ?? err));
     } finally {

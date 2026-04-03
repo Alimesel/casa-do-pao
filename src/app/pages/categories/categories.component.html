@@ -16,7 +16,7 @@
               <div class="cat-img-border"></div>
             </div>
             <div class="cat-count-pill">
-              {{ dataService.getProductsByCategory(cat.id).length }} items
+              {{ dataService.getProductsByCategory(cat.id).length }} itens
             </div>
           </div>
 
@@ -31,12 +31,12 @@
                 <span class="cat-item-tag">{{ product.name }}</span>
               }
               @if (dataService.getProductsByCategory(cat.id).length > 3) {
-                <span class="cat-item-more">+{{ dataService.getProductsByCategory(cat.id).length - 3 }} more</span>
+                <span class="cat-item-more">+{{ dataService.getProductsByCategory(cat.id).length - 3 }} mais</span>
               }
             </div>
 
             <a [routerLink]="['/products', cat.id]" class="btn-primary">
-              View {{ cat.name }}
+              Ver {{ cat.name }}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>

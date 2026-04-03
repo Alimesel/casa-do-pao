@@ -39,11 +39,11 @@
 
     <div class="hero-copy">
       <h1 class="headline">
-        A Moment of<br><em>Pure Indulgence</em>
+        Um Momento de<br><em>Puro Prazer</em>
       </h1>
       <div class="cta-row">
-        <a routerLink="/products" class="cta cta-solid">Order Now</a>
-        <a routerLink="/about"    class="cta cta-ghost">Our Story</a>
+        <a routerLink="/products" class="cta cta-solid">Order now</a>
+        <a routerLink="/about"    class="cta cta-ghost">Nossa História</a>
       </div>
     </div>
 
@@ -57,8 +57,8 @@
 <section class="cats-section">
 
   <div class="cats-head reveal">
-    <span class="section-label">Explore</span>
-    <h2>Our Categories</h2>
+    <span class="section-label">Explorar</span>
+    <h2>As Nossas Categorias</h2>
   </div>
 
   <div class="cats-carousel">
@@ -128,14 +128,13 @@
 <section class="split-banner">
 
   <div class="split-copy reveal-left">
-    <span class="section-label">Freshly Made Daily</span>
-    <h2 class="split-title">Delicious<br><em>Desserts</em></h2>
+    <span class="section-label">Fresco Preparado Todos os Dias</span>
+    <h2 class="split-title">Delicioso<br><em>Sobremesas</em></h2>
     <p class="split-desc">
-      From silky éclairs to fudge brownies, every dessert at Casa do Pão is
-      made by hand each morning using the finest seasonal ingredients.
+     Desde éclairs suaves a brownies de fudge, cada sobremesa na Casa do Pão é feita à mão todas as manhãs, usando os melhores ingredientes sazonais
     </p>
     <a routerLink="/products" class="btn-brown">
-      All Menu
+     Todo o Menu
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M5 12h14M12 5l7 7-7 7"/>
       </svg>
@@ -158,15 +157,12 @@
     </div>
 
     <div class="teaser-copy reveal-right">
-      <span class="section-label">About Casa do Pão</span>
-      <h2>Where Every Morning <em>Begins with Joy</em></h2>
+      <span class="section-label">Sobre a Casa do Pão</span>
+      <h2>Onde Todas as Manhãs <em>Começa com Alegria</em></h2>
       <p>
-        Born from a passion for the art of patisserie, Casa do Pão has been
-        handcrafting pastries, cakes and specialty coffee in Lisboa since 2010.
-        We source only the finest ingredients — local butter, seasonal fruits,
-        single-origin beans — because quality has no shortcuts.
+       Nascida da paixão pela arte da pastelaria, a Casa do Pão tem vindo a confeccionar à mão pastelaria, bolos e cafés especiais em Bissau desde 2025. Utilizamos apenas os melhores ingredientes — manteiga local, frutas da época, grãos de café de origem única — porque a qualidade não tem atalhos
       </p>
-      <a routerLink="/about" class="btn-brown">Discover Our Story</a>
+      <a routerLink="/about" class="btn-brown">Descubra Nossa História</a>
     </div>
 
   </div>
@@ -178,8 +174,8 @@
   <div class="feat-container">
 
     <div class="feat-header reveal">
-      <span class="section-label">Our Selection</span>
-      <h2>Taste Our World</h2>
+      <span class="section-label">Nossa Seleção</span>
+      <h2>Saboreie Nosso Mundo</h2>
     </div>
 
     <div class="featured-grid">
@@ -212,7 +208,7 @@
                   [routerLink]="['/products', cat.id]"
                   class="feat-more-btn"
                   (click)="$event.stopPropagation()">
-                  More {{ cat.name }}
+                  Mais {{ cat.name }}
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
@@ -223,7 +219,7 @@
 
             <div class="feat-info">
               <div class="feat-meta">
-                <span class="feat-price">€{{ product.price.toFixed(2) }}</span>
+                <span class="feat-price">{{ product.price.toFixed(2) }} f</span>
               </div>
               <h3 class="feat-name">{{ product.name }}</h3>
               <p  class="feat-desc">{{ product.description }}</p>
@@ -234,10 +230,10 @@
                 (click)="addToCart(product)">
                 @if (addedId() === product.id) {
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  Added!
+                  Adicionado!
                 } @else {
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  Add to Order
+                 Adicionar à Encomenda
                 }
               </button>
             </div>
@@ -249,7 +245,7 @@
 
     <div class="feat-cta reveal">
       <a routerLink="/products" class="btn-brown">
-        See Full Menu
+        Ver Menu Completo
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
@@ -270,7 +266,7 @@
           <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
         </svg>
       </div>
-      <div><h4>Opening Hours</h4><p>EveryDay</p><p>07:00 – 23:00</p></div>
+      <div><h4>Horário de Funcionamento</h4><p>Diariamente</p><p>07:00 – 23:00</p></div>
     </div>
 
     <div class="ribbon-divider"></div>
@@ -281,7 +277,7 @@
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
         </svg>
       </div>
-      <div><h4>Location</h4><p>da granja do pessube</p><p>Bissau, Guinea-Bissau</p></div>
+      <div><h4>Localização</h4><p>da granja do pessube</p><p>Bissau, Guinea-Bissau</p></div>
     </div>
 
     <div class="ribbon-divider"></div>
@@ -292,7 +288,7 @@
           <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .98h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
         </svg>
       </div>
-      <div><h4>Reservations</h4><p>+351 21 345 6789</p></div>
+      <div><h4>Reservas</h4><p>+351 21 345 6789</p></div>
     </div>
 
   </div>

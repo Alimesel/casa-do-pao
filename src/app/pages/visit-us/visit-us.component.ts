@@ -22,20 +22,20 @@ export class VisitUsComponent implements OnInit, OnDestroy {
 
   /* ── Data ── */
   hours = [
-    { day: 'Monday',    time: '08:00 – 22:00' },
-    { day: 'Tuesday',   time: '08:00 – 22:00' },
-    { day: 'Wednesday', time: '08:00 – 22:00' },
-    { day: 'Thursday',  time: '08:00 – 22:00' },
-    { day: 'Friday',    time: '08:00 – 23:00' },
-    { day: 'Saturday',  time: '09:00 – 23:00' },
-    { day: 'Sunday',    time: '09:00 – 21:00' },
+    { day: 'Segunda-feira',    time: '07:00 – 23:00' },
+    { day: 'Terça-feira',   time: '07:00 – 23:00' },
+    { day: 'Quarta-feira', time: '07:00 – 23:00' },
+    { day: 'Quinta-feira',  time: '07:00 – 23:00' },
+    { day: 'Sexta-feira',    time: '07:00 – 23:00' },
+    { day: 'Sábado',  time: '07:00 – 23:00' },
+    { day: 'Domingo',    time: '07:00 – 21:00' },
   ];
 
   images = [
     { src: 'assets/images/visit1.jpeg', label: 'Interior'     },
-    { src: 'assets/images/visit2.jpeg', label: 'Coffee Bar'   },
-    { src: 'assets/images/visit3.jpeg', label: 'Tables'       },
-    { src: 'assets/images/visit4.jpeg', label: 'Our Pastries' },
+    { src: 'assets/images/visit2.jpeg', label: 'Tables'   },
+    { src: 'assets/images/visit3.jpeg', label: 'Coffee'       },
+    { src: 'assets/images/visit4.jpeg', label: 'Beauty' },
   ];
 
   /* ── Carousel state ── */
