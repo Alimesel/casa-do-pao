@@ -1,0 +1,213 @@
+/* ============================================================
+   ABOUT PAGE
+   ============================================================ */
+
+/* shared hero pattern */
+.page-hero {
+  position: relative;
+  height: 55vh;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.page-hero-bg {
+  margin-top: 20px;
+  position: absolute;
+  inset: 0;
+  img {
+    width: 100%;  
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.65);
+  }
+}
+
+.page-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: var(--cream);
+  animation: fadeUp 0.9s ease forwards;
+  .hero-eyebrow-text {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--brown-100);
+    margin-bottom: 0.8rem;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 0.8rem;
+  }
+  p {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(250, 240, 220, 0.75);
+  }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- STORY ---- */
+.story-section {
+  background: white;
+  padding: 7rem 0;
+}
+
+.story-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+.story-copy {
+  .section-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 400;
+    color: var(--text-dark);
+    line-height: 1.25;
+    margin-bottom: 1.5rem;
+    em { font-style: italic; color: var(--brown-400); }
+  }
+
+  p {
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--text-body);
+    line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+
+  a { margin-top: 1rem; background: var(--btn-primary); border: 1px solid var(--btn-primary); }
+}
+
+/* ── Image composition ──────────────────────────────────────
+   Layout: large portrait on the left, smaller square floated
+   to the bottom-right, overlapping the portrait edge.
+   A thin decorative frame sits behind the accent image.
+   ─────────────────────────────────────────────────────────── */
+.story-images {
+  position: relative;
+  /* tall enough to contain the overlap */
+  padding-bottom: 3.5rem;
+
+  @media (max-width: 860px) {
+    padding-bottom: 2rem;
+  }
+}
+
+/* Large portrait */
+.story-img-main {
+  position: relative;
+  z-index: 1;
+  width: 78%;
+  border: 1px solid var(--border-mid);
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(60, 42, 26, 0.12);
+
+  img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &:hover img {
+    transform: scale(1.04);
+  }
+}
+
+/* Small square — overlaps bottom-right of portrait */
+.story-img-accent {
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  right: 0;
+  width: 60%;
+  border: 1px solid var(--border-mid);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(60, 42, 26, 0.18);
+
+  img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Thin decorative frame offset behind the image */
+  &__frame {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(181, 120, 31, 0.3);
+    transform: translate(10px, 10px);
+    z-index: -1;
+    pointer-events: none;
+  }
+}
+
+/* Vertical rotated label beside the images */
+.story-img-label {
+  position: absolute;
+  bottom: 1.2rem;
+  left: -2.2rem;
+  z-index: 3;
+
+  span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.56rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--brown-400);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 860px) {
+    display: none;
+  }
+}

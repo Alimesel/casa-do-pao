@@ -1,0 +1,220 @@
+<div class="visit-page">
+
+  <!-- ══ PAGE HEADER ══ -->
+  <header class="v-header">
+    <div class="v-header__inner">
+     
+      <h1 class="v-header__title">
+     
+      </h1>
+      
+     
+    </div>
+  </header>
+
+  <!-- ══ CAROUSEL GALLERY ══ -->
+  <section class="v-carousel-section">
+
+    <!-- Label + dots row -->
+    <div class="v-carousel__header">
+      <span class="v-section-label">Dentro do Café</span>
+      <div class="v-carousel__dots">
+        @for (img of images; track img.src; let i = $index) {
+          <button
+            class="v-carousel__dot"
+            [class.v-carousel__dot--active]="carouselIndex === i"
+            (click)="goToSlide(i)"
+            [attr.aria-label]="'Go to ' + img.label">
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Full-bleed sliding viewport -->
+    <div class="v-carousel__viewport"
+         (mouseenter)="pauseCarousel()"
+         (mouseleave)="resumeCarousel()">
+
+      <div class="v-carousel__track"
+           [style.transform]="'translateX(-' + (carouselIndex * 100) + 'vw)'">
+
+        @for (img of images; track img.src; let i = $index) {
+          <div class="v-carousel__slide" (click)="openLightbox(i)">
+            <img [src]="img.src" [alt]="img.label" [attr.loading]="i === 0 ? 'eager' : 'lazy'">
+            <div class="v-carousel__caption">
+              <span class="v-carousel__caption-text">{{ img.label }}</span>
+              <span class="v-carousel__caption-hint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.8">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  <line x1="11" y1="8" x2="11" y2="14"/>
+                  <line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+                Toque para expandir
+              </span>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+
+    <!-- Thin auto-advance progress bar -->
+    <div class="v-carousel__progress">
+      <div class="v-carousel__progress-bar"
+           [style.width.%]="progressPct"
+           [style.transition]="progressPct === 0 ? 'none' : 'width 0.1s linear'">
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ MAP ══ -->
+  <section class="v-map-section">
+    <div class="v-map-inner">
+      <div class="v-map-label-row">
+        <span class="v-section-label">Encontre-nos</span>
+      </div>
+      <div class="v-map-wrap">
+        <a
+          class="v-map-link"
+          href="https://www.google.com/maps?q=11.866074792251588,-15.59646438064931"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open in Google Maps">
+          <div class="v-map-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Abrir no Google Maps
+          </div>
+        </a>
+
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3906.4!2d-15.59646438064931!3d11.866074792251588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTHCsDUxJzU3LjkiTiAxNcKwMzUnNDcuMyJX!5e0!3m2!1sen!2s!4v1700000000000"
+          width="100%" height="100%"
+          style="border:0; display:block;"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Casa do Pão — Bissau">
+        </iframe>
+
+        <!-- Animated pin -->
+        <div class="v-pin" aria-hidden="true">
+          <div class="v-pin__rings">
+            <span class="v-pin__ring"></span>
+            <span class="v-pin__ring v-pin__ring--b"></span>
+            <span class="v-pin__ring v-pin__ring--c"></span>
+          </div>
+          <div class="v-pin__body">
+           
+          </div>
+          <div class="v-pin__dot"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ INFO GRID ══ -->
+  <section class="v-info">
+    <div class="v-info__inner">
+
+      <div class="v-info__col">
+        <span class="v-label">A Nossa Localização</span>
+        <address class="v-address">
+          da granja do pessube<br>
+          Bissau, Guiné-Bissau
+        </address>
+        <a class="v-directions-btn"
+           href="https://www.google.com/maps?q=11.866074792251588,-15.59646438064931"
+           target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8">
+            <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+          </svg>
+         Obter Direções
+        </a>
+      </div>
+
+      <div class="v-info__vr" aria-hidden="true"></div>
+
+      <div class="v-info__col">
+        <span class="v-label">Horário de Funcionamento</span>
+        <ul class="v-hours">
+          @for (hour of hours; track hour.day; let i = $index) {
+            <li class="v-hours__row" [class.v-hours__row--today]="i === todayIndex">
+              <span class="v-hours__day">{{ hour.day }}</span>
+              <span class="v-hours__dots"></span>
+              <span class="v-hours__time">{{ hour.time }}</span>
+              @if (i === todayIndex) {
+                <span class="v-hours__pill">Hoje</span>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="v-info__vr" aria-hidden="true"></div>
+
+      <div class="v-info__col">
+        <span class="v-label">Contacto</span>
+        <div class="v-contact-rows">
+          <div class="v-contact-row">
+            <span class="v-contact-row__key">Telefone</span>
+            <span class="v-contact-row__val">+245 955 000 000</span>
+          </div>
+          <div class="v-contact-row">
+            <span class="v-contact-row__key">Reservas</span>
+            <span class="v-contact-row__val">Chegada direta &amp; por telefone</span>
+          </div>
+          <div class="v-contact-row">
+            <span class="v-contact-row__key">Sobremesas Personalizadas</span>
+            <span class="v-contact-row__val">Encomendas bem-vindas</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ LIGHTBOX ══ -->
+  @if (lightboxOpen) {
+    <div class="v-lightbox" (click)="closeLightbox()">
+      <button class="v-lightbox__close" (click)="closeLightbox()" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <button class="v-lightbox__nav v-lightbox__nav--prev"
+              (click)="prevImage($event)" aria-label="Previous">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <div class="v-lightbox__content" (click)="$event.stopPropagation()">
+        <img [src]="images[lightboxIndex].src" [alt]="images[lightboxIndex].label">
+        <div class="v-lightbox__meta">
+          <span class="v-lightbox__label">{{ images[lightboxIndex].label }}</span>
+          <span class="v-lightbox__counter">
+            {{ lightboxIndex + 1 }} / {{ images.length }}
+          </span>
+        </div>
+      </div>
+      <button class="v-lightbox__nav v-lightbox__nav--next"
+              (click)="nextImage($event)" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  }
+
+</div>

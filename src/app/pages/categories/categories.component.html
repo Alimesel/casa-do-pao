@@ -1,0 +1,52 @@
+<div class="categories-page">
+
+  <!-- Categories Grid -->
+  <section class="cats-section">
+    <div class="cats-container">
+
+      @for (cat of dataService.categories; track cat.id; let i = $index) {
+        <article
+          class="cat-card reveal"
+          [class.cat-card--reverse]="i % 2 !== 0"
+          [style.animation-delay]="(i * 0.12) + 's'">
+
+          <div class="cat-img-side">
+            <div class="cat-img-frame">
+              <img [src]="cat.image" [alt]="cat.name" class="cat-img">
+              <div class="cat-img-border"></div>
+            </div>
+            <div class="cat-count-pill">
+              {{ dataService.getProductsByCategory(cat.id).length }} itens
+            </div>
+          </div>
+
+          <div class="cat-copy">
+            <span class="cat-number">0{{ i + 1 }}</span>
+            <span class="cat-label">{{ cat.subtitle }}</span>
+            <h2 class="cat-name">{{ cat.name }}</h2>
+            <p class="cat-desc">{{ cat.description }}</p>
+
+            <div class="cat-items-preview">
+              @for (product of dataService.getProductsByCategory(cat.id).slice(0, 3); track product.id) {
+                <span class="cat-item-tag">{{ product.name }}</span>
+              }
+              @if (dataService.getProductsByCategory(cat.id).length > 3) {
+                <span class="cat-item-more">+{{ dataService.getProductsByCategory(cat.id).length - 3 }} mais</span>
+              }
+            </div>
+
+            <a [routerLink]="['/products', cat.id]" class="btn-primary">
+              Ver {{ cat.name }}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+
+        </article>
+      }
+
+    </div>
+  </section>
+
+</div>
